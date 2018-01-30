@@ -1,16 +1,21 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
-var indexRoutes = require('./routes/index');
-var bookRoutes = require('./routes/book');
+var indexRoutes = require('./server/routes/index');
+var bookRoutes = require('./server/routes/book');
+
+require('dotenv').config({ path: 'variables.env' });
 
 var app = express();
+app.use(cors());
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'server/views'));
 app.set('view engine', 'pug');
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -18,7 +23,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Connect to MongoDB
+mongoose.connect(process.env.DATABASE);
+mongoose.Promise = global.Promise;
+mongoose.connection.on('error', err => {
+  console.error(`❌MongoDB Error❌ → ${err.message}`);
+});
+
+// Require Mongoose Model
+require('./server/model/Book');
 
 app.use('/', indexRoutes);
 app.use('/book', bookRoutes);
