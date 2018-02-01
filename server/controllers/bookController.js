@@ -19,8 +19,11 @@ exports.listing = async(req, res) => {
   res.json(listing);
 };
 
-exports.deleteBook = (req, res) => {
-
+exports.deleteBook = async (req, res) => {
+  console.log('RECEIVED =}')
+  let book = await Book.find({ _id: req.params.id }).remove();
+  console.log(book);
+  res.json({ status: 'Book has been deleted!' })
 };
 
 // TODO: Certain book route (GET)

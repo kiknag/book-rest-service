@@ -38,6 +38,15 @@ class App extends Component {
     }, 1000);
   }
 
+  deleteItem(id) {
+    axios.delete('http://localhost:5001/book/delete/' + id)
+      .then(response => console.log(response))
+      .catch(error => console.error(error))
+    setTimeout(() => {
+      this.getData();      
+    }, 1000);
+  }
+
   componentWillMount() {
     this.getData();
   }
@@ -59,7 +68,7 @@ class App extends Component {
             </tr>
           </thead>
           <tbody>
-            { this.state.data && this.state.data.map(el => <ListItem data={el} key={el._id} />)}                        
+            { this.state.data && this.state.data.map(el => <ListItem data={el} key={el._id} delete={this.deleteItem.bind(this)} />) }            
           </tbody>
         </table>
         <hr/>
