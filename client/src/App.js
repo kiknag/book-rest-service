@@ -25,26 +25,19 @@ class App extends Component {
     axios.post('http://localhost:5001/book/addbook', {
       name: this.state.entry
     }).then(res => {
-      console.log(res);
       return res.data
     })
     .then(res => {
       this.inputTitle.value = '';
       this.setState({ status: res.status })
-    });
-
-    setTimeout(() => {
-      this.getData();
-    }, 1000);
+    }).then(() => this.getData());
   }
 
   deleteItem(id) {
     axios.delete('http://localhost:5001/book/delete/' + id)
-      .then(response => console.log(response))
+      .then(response => this.setState({ status: response.data.status}))
+      .then(() => this.getData())
       .catch(error => console.error(error))
-    setTimeout(() => {
-      this.getData();      
-    }, 1000);
   }
 
   componentWillMount() {
