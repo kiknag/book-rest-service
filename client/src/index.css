@@ -9,3 +9,12 @@ body {
   color: white;
   border-color: red;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: #7b40e9;
+  color: white;
+}

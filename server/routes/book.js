@@ -9,6 +9,9 @@ router.get('/booklisting', bookController.listing);
 router.post('/addbook', bookController.addBook);
 
 // DELETE existing book
-router.delete('/delete/:id', bookController.deleteBook)
+router.delete('/delete/:id', bookController.deleteBook);
+
+// UPDATE existing book
+router.put('/update/:id', bookController.updateBook);
 
 module.exports = router;

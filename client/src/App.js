@@ -40,6 +40,29 @@ class App extends Component {
       .catch(error => console.error(error))
   }
 
+  update = (e) => {
+    console.log(e.currentTarget.textContent);
+    this.setState({ updateCandidate: e.currentTarget.textContent });
+
+    this.setState({
+      candidate: this.state.data.filter(item => item.name == e.currentTarget.textContent)
+    })
+  }
+
+  change(e) {
+    this.setState({ updateCandidate: e.target.value });
+  }
+
+  updateItem() {
+    axios.put('http://localhost:5001/book/update/' + this.state.candidate[0]['_id'], {
+      name: this.state.updateCandidate
+    })
+      .then(response => this.setState({ status: response.data.status }))
+      .then(() => this.getData())
+      .catch(error => console.error(error))
+  }
+
+
   componentWillMount() {
     this.getData();
   }
@@ -61,17 +84,29 @@ class App extends Component {
             </tr>
           </thead>
           <tbody>
-            { this.state.data && this.state.data.map(el => <ListItem data={el} key={el._id} delete={this.deleteItem.bind(this)} />) }            
+            { this.state.data && this.state.data.map(el => <ListItem data={el} key={el._id} delete={this.deleteItem.bind(this)} update={this.update} />) }            
           </tbody>
         </table>
         <hr/>
-        <div className="row col-md-4 offset-md-4">
-          <div className="form-inline">
-            <div className="form-group mx-sm-3 mb-2">
-              <input type="text" className="form-control" placeholder="Book Name" onChange={this.addEntry.bind(this)} ref={el => this.inputTitle = el} />
+        <div className="row">
+          <div className="col-md-4 offset-md-4">
+            <div className="form-inline">
+              <div className="form-group mx-sm-3 mb-2">
+                <input type="text" className="form-control" placeholder="Book Name" onChange={this.addEntry.bind(this)} ref={el => this.inputTitle = el} />
+              </div>
+              <button className="btn btn-primary mb-2" onClick={this.pushData.bind(this)}>Add Entry</button>
             </div>
-            <button className="btn btn-primary mb-2" onClick={this.pushData.bind(this)}>Add Entry</button>
           </div>
+          { this.state.updateCandidate ? 
+            <div className="col-md-4 offset-md-4">
+              <div className="form-inline">
+                <div className="form-group mx-sm-3 mb-2">
+                  <input type="text" value={this.state.updateCandidate} onChange={this.change.bind(this)} className="form-control" />
+                </div>
+                <button className="btn btn-warning mb-2" onClick={this.updateItem.bind(this)}>Update</button>
+              </div>
+            </div>
+          : ''}
         </div>
       </div>
     );

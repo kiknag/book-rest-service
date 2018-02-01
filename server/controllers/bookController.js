@@ -26,6 +26,26 @@ exports.deleteBook = async (req, res) => {
   res.json({ status: 'Book has been deleted!' })
 };
 
+exports.updateBook = async (req, res) => {
+  await Book.findOneAndUpdate({ _id: req.params.id }, req.body, (err, doc) => {
+    if (err) {
+      return res.json({ status: err.message });
+    }
+
+    console.log(req.body);
+    console.log(doc);
+    return res.json({ status: 'Successfully Updated!' })
+  });
+  // try {
+  //   let book = await Book.find({ _id: req.body._id });
+  // } catch(e) {
+  //   return res.json({ status: e.message });
+  // }
+  // book = req.body;
+  // await book.save();
+  // res.json({ status: 'Successfully Updated!' });
+};
+
 // TODO: Certain book route (GET)
 // TODO: Add new book route (POST)
 // TODO: Delete existing book (GET/DELETE)
