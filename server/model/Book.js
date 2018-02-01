@@ -4,14 +4,10 @@ const mongodbErrorHandler = require('mongoose-mongodb-errors');
 mongoose.Promise = global.Promise;
 
 const bookSchema = new Schema({
-  id: {
-    type: String,
-    unique: true,
-    required: true
-  },
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 });
 

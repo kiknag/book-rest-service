@@ -31,9 +31,6 @@ mongoose.connection.on('error', err => {
   console.error(`❌MongoDB Error❌ → ${err.message}`);
 });
 
-// Require Mongoose Model
-require('./server/model/Book');
-
 app.use('/', indexRoutes);
 app.use('/book', bookRoutes);
 
